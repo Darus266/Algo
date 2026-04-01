@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithme Day 2026 - Côte d'Ivoire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header avec le logo */
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1f1f1f 100%);
+            padding: 30px 30px 25px;
+            text-align: center;
+            border-bottom: 4px solid #FFD700;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            max-width: 180px;
+            width: 100%;
+            height: auto;
+            border-radius: 12px; /* Arrondi pour l'image de remplacement */
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Version texte si l'image n'est pas disponible */
+        .logo-text {
+            display: none;
+        }
+
+        .event-date {
+            color: #FFD700;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-top: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .event-location {
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .tagline {
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        .form-section {
+            padding: 35px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f1f1f;
+            font-size: 0.9rem;
+        }
+
+        label .required {
+            color: #FFD700;
+            margin-left: 3px;
+            text-shadow: 0 0 1px rgba(0,0,0,0.1); /* Améliorer la lisibilité sur fond blanc */
+            color: #d4af37; /* Or un peu plus sombre pour le contraste */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafc;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+            background: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #000000 0%, #2c2c2c 100%);
+            color: #FFD700;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
+            color: #FFE55C;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Feedback Messages */
+        .message {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            display: none; /* Caché par défaut */
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #10b981;
+            display: block;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+            display: block;
+        }
+
+        /* Participants List */
+        .participants-list {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .participants-list h3 {
+            margin-bottom: 18px;
+            color: #1f1f1f;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .participants-list h3::before {
+            content: "👥";
+            font-size: 1.3rem;
+        }
+
+        #participantsContainer {
+            max-height: 280px;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding-right: 5px;
+        }
+
+        .participant-card {
+            background: #fafafc;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            border: 1px solid #f0f0f0;
+        }
+
+        .participant-card:hover {
+            border-color: #FFD700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateX(2px);
+        }
+
+        .participant-info {
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .participant-name {
+            font-weight: 700;
+            color: #1f1f1f;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        .participant-details {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .participant-details span {
+            display: inline-block;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            background: #ffffff;
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: auto;
+            text-transform: none;
+            letter-spacing: normal;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+            transform: none;
+            box-shadow: none;
+            color: #b91c1c;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 30px;
+            color: #9ca3af;
+            background: #fafafc;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            border: 1px dashed #e5e7eb;
+        }
+
+        /* Scrollbar personnalisée */
+        #participantsContainer::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #participantsContainer::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        #participantsContainer::-webkit-scrollbar-thumb {
+            background: #FFD700;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 550px) {
+            .form-section {
+                padding: 25px;
+            }
+            
+            .participant-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .delete-btn {
+                align-self: flex-end;
+                width: 100%;
+            }
+            
+            .logo {
+                max-width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <!-- Utilisation d'une image aléatoire stable car l'image locale n'existe pas -->
+                <img src="https://picsum.photos/seed/algoday2026/300/150.jpg" alt="Algorithme Day Côte d'Ivoire" class="logo">
+            </div>
+            <div class="event-date">📅 15 OCTOBRE 2026</div>
+            <div class="event-location">📍 Abidjan - Plateau, Palais de la Culture</div>
+            <div class="tagline">« Vient déposer à nos pieds tout ce qui te dépasse »</div>
+        </div>
+        
+        <div class="form-section">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullname">Nom complet <span class="required">*</span></label>
+                    <input type="text" id="fullname" required placeholder="Kouadio Jean-Marc">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" required placeholder="contact@exemple.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" placeholder="+225 07 XX XX XX XX">
+                </div>
+                <div class="form-group">
+                    <label for="company">Entreprise / Institution</label>
+                    <input type="text" id="company" placeholder="Votre organisation">
+                </div>
+                <div class="form-group">
+                    <label for="status">Statut <span class="required">*</span></label>
+                    <select id="status" required>
+                        <option value="">Sélectionnez votre statut</option>
+                        <option value="Étudiant">🎓 Étudiant</option>
+                        <option value="Développeur">💻 Développeur / Ingénieur</option>
+                        <option value="Chef de projet">📊 Chef de projet</option>
+                        <option value="Entrepreneur">🚀 Entrepreneur / Fondateur</option>
+                        <option value="Enseignant">📚 Enseignant / Chercheur</option>
+                        <option value="Autre">🔧 Autre</option>
+                    </select>
+                </div>
+                <button type="submit" id="submitBtn">✨ S'inscrire maintenant ✨</button>
+            </form>
+
+            <div id="message" class="message"></div>
+            
+            <div class="participants-list">
+                <h3>Participants inscrits</h3>
+                <div id="participantsContainer">
+                    <div class="empty-list">Chargement...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- UTILITAIRES ---
+
+        // Sécurité XSS : Échapper les caractères HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Afficher un message à l'utilisateur
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            // Masquer après 5 secondes si c'est un succès
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // --- SIMULATION API (LOCALSTORAGE) ---
+        // Remplace l'appel à localhost:3000 pour rendre l'outil fonctionnel sans serveur
+        
+        const STORAGE_KEY = 'algoday_participants_v1';
+
+        // Récupérer les données
+        function getStoredParticipants() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Sauvegarder les données
+        function saveStoredParticipants(participants) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(participants));
+        }
+
+        // --- LOGIQUE MÉTIER ---
+
+        // Charger les participants (Simulation du fetch GET)
+        async function loadParticipants() {
+            try {
+                // Simulation d'un délai réseau
+                await new Promise(resolve => setTimeout(resolve, 400));
+                
+                const participants = getStoredParticipants();
+                displayParticipants(participants);
+            } catch (error) {
+                console.error('Erreur:', error);
+                showMessage('Erreur de chargement des participants', 'error');
+            }
+        }
+
+        // Afficher la liste des participants
+        function displayParticipants(participants) {
+            const container = document.getElementById('participantsContainer');
+            
+            if (!participants || participants.length === 0) {
+                container.innerHTML = '<div class="empty-list">✨ Aucun participant pour le moment.<br>Soyez le premier à vous inscrire ! ✨</div>';
+                return;
+            }
+            
+            // Tri par date d'inscription (le plus récent en haut)
+            const sortedParticipants = [...participants].reverse();
+
+            container.innerHTML = sortedParticipants.map(p => {
+                // Construction sécurisée du HTML
+                const statusHtml = p.status ? `<span>🏷️ ${escapeHtml(p.status)}</span>` : '';
+                const companyHtml = p.company ? `<span>🏢 ${escapeHtml(p.company)}</span>` : '';
+                
+                return `
+                <div class="participant-card">
+                    <div class="participant-info">
+                        <div class="participant-name">${escapeHtml(p.fullname)}</div>
+                        <div class="participant-details">
+                            <span>📧 ${escapeHtml(p.email)}</span>
+                            ${statusHtml}
+                            ${companyHtml}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteParticipant('${p.id}')">❌ Supprimer</button>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Supprimer un participant (Simulation du fetch DELETE)
+        window.deleteParticipant = async function(id) {
+            if (!confirm('Voulez-vous vraiment supprimer cette inscription ?')) return;
+            
+            try {
+                // Simulation délai réseau
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                let participants = getStoredParticipants();
+                participants = participants.filter(p => p.id !== id);
+                saveStoredParticipants(participants);
+                
+                showMessage('Inscription supprimée avec succès', 'success');
+                loadParticipants(); // Rafraîchir la vue
+            } catch (error) {
+                showMessage('Erreur lors de la suppression', 'error');
+            }
+        };
+
+        // Inscrire un participant (Simulation du fetch POST)
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.textContent;
+            
+            // Récupération des valeurs
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const status = document.getElementById('status').value;
+            
+            // Validation basique
+            if (!fullname || !email || !status) {
+                showMessage('Veuillez remplir tous les champs obligatoires (*)', 'error');
+                return;
+            }
+            
+            // Effacer l'ancien message
+            document.getElementById('message').style.display = 'none';
+            
+            // État de chargement sur le bouton
+            btn.disabled = true;
+            btn.textContent = '⏳ Inscription en cours...';
+
+            try {
+                // Simulation délai réseau
+                await new Promise(resolve => setTimeout(resolve, 600));
+
+                const newParticipant = {
+                    id: Date.now().toString(), // Génération d'un ID unique simple
+                    fullname,
+                    email,
+                    phone,
+                    company,
+                    status,
+                    createdAt: new Date().toISOString()
+                };
+
+                const participants = getStoredParticipants();
+                participants.push(newParticipant);
+                saveStoredParticipants(participants);
+                
+                document.getElementById('registrationForm').reset();
+                showMessage('✅ Inscription confirmée ! Bienvenue à l\'Algorithme Day 2026 🎉', 'success');
+                loadParticipants(); // Rafraîchir la vue
+
+            } catch (error) {
+                showMessage('Erreur lors de l\'inscription', 'error');
+            } finally {
+                // Rétablir le bouton
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        });
+        
+        // Initialisation au chargement de la page
+        loadParticipants();
+    </script>
+</body>
+</html>
