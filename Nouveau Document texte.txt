@@ -1,0 +1,1 @@
+mongodb+srv://darusstore26_db_user:<db_password>@algodaycluster.8cs5rle.mongodb.net/?appName=AlgodayCluster
